@@ -44,13 +44,10 @@ def api_all():
 
 @app.route('/api/gehalt/<jahr>', methods=['GET'])
 def api_gehalt(jahr):
-
-    # Open database connection
-    #db = pymysql.connect("192.168.178.129","joerg","j740lba","jh")
     # Connect to the database
-    db = pymysql.connect(host='192.168.178.129',
+    db = pymysql.connect(host='192.168.178....',
                                 user='joerg',
-                                password='j740lba',
+                                password='...',
                                 database='jh',
                                 cursorclass=pymysql.cursors.DictCursor)
 
