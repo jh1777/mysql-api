@@ -7,7 +7,10 @@ from gehaltApi import gehalt_api
 # pip3 install pymysql
 # pip3 install flask
 
+import json
 app = Flask(__name__)
+app.config.from_object("config.DevelopmentConfig")
+
 app.config["DEBUG"] = True
 app.json_encoder = MyJSONEncoder
 app.register_blueprint(gehalt_api, url_prefix='/salary/v1')
@@ -45,10 +48,10 @@ def api_all():
 @app.route('/api/gehalt/<jahr>', methods=['GET'])
 def api_gehalt(jahr):
     # Connect to the database
-    db = pymysql.connect(host='192.168.178....',
-                                user='joerg',
-                                password='...',
-                                database='jh',
+    db = pymysql.connect(host=app.config["DB_IP"],
+                                user=app.config["DB_USERNAME"],
+                                password=app.config["DB_PASSWORD"],
+                                database=app.config["DB_NAME"],
                                 cursorclass=pymysql.cursors.DictCursor)
 
     # prepare a cursor object using cursor() method
