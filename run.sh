@@ -1,3 +1,1 @@
-export FLASK_ENV=development
-export FLASK_APP=api.py
-flask run
+python3 app.py
