@@ -3,6 +3,9 @@ name = "mysql-api"
 version = "0.1.0"
 description = ""
 authors = ["Joerg"]
+packages = [
+    { include = "app.py" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
