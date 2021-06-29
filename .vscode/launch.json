@@ -18,7 +18,7 @@
             },
             "args": [
                 "run",
-                "swagger.yaml",
+                "openapi/swagger.yaml",
                 "--port",
                 "5678"
             ],

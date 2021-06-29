@@ -71,5 +71,5 @@ CMD ["gunicorn3", \
     "--workers=2", "--threads=2", "--worker-class=gthread", \
     "--log-file=-", \
     "--timeout", "120",  \
-    "app:api"]
+    "app.py"]
 
