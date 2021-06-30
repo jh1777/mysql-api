@@ -2,7 +2,7 @@ import connexion
 from connexion.resolver import RestyResolver
 #from flask_cors import CORS
 
-application = connexion.App(__name__, specification_dir='openapi')
+application = connexion.App(__name__, specification_dir='/app/openapi')
 
 #api.add_api('swagger.yaml')
 application.add_api(
