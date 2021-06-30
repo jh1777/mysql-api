@@ -4,11 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["Joerg"]
 packages = [
-    { include = "app.py" }
+    { include = "app.py" },
+    { include = "backend" }
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6.9"
 PyMySQL = "^1.0.2"
 connexion = {extras = ["swagger-ui"], version = "^2.7.0"}
 Flask = "^2.0.1"

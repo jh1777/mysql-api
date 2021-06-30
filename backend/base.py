@@ -3,7 +3,7 @@ import pymysql
 import pymysql.cursors
 import connexion
 
-app = connexion.FlaskApp(__name__)
+app = connexion.App(__name__)
 app.app.config.from_object("config.DevelopmentConfig")
 
 def connectToDb():

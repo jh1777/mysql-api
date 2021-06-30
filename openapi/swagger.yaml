@@ -17,7 +17,7 @@ paths:
       - "salary"
       summary: "Add a new salary entry to the database"
       description: ""
-      operationId: "api.salary.create"
+      operationId: "backend.salary.create"
       consumes:
       - "application/json"
       produces:
@@ -42,7 +42,7 @@ paths:
       - "salary"
       summary: "Gets all salary entries"
       description: ""
-      operationId: "api.salary.getAll"
+      operationId: "backend.salary.getAll"
       produces:
       - "application/json"
       responses:
@@ -63,7 +63,7 @@ paths:
       - "salary"
       summary: "Find salary by ID"
       description: "Returns one entry for that Id"
-      operationId: "api.salary.getById"
+      operationId: "backend.salary.getById"
       produces:
       - "application/json"
       parameters:
@@ -89,7 +89,7 @@ paths:
       - "salary"
       summary: "Find salary by year"
       description: "Returns all salary entries for that year"
-      operationId: "api.salary.getByYear"
+      operationId: "backend.salary.getByYear"
       produces:
       - "application/json"
       parameters:

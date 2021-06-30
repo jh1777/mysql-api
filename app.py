@@ -6,7 +6,7 @@ application = connexion.App(__name__, specification_dir='openapi')
 
 #api.add_api('swagger.yaml')
 application.add_api(
-    "swagger.yaml", resolver=RestyResolver("api"), strict_validation=False
+    "swagger.yaml", resolver=RestyResolver("backend"), strict_validation=False
 )
 
 # expose an app object for "flask run"
