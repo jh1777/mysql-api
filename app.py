@@ -1,10 +1,16 @@
 import connexion
+from connexion.resolver import RestyResolver
 #from flask_cors import CORS
 
-api = connexion.FlaskApp(__name__, specification_dir='openapi/')
+application = connexion.App(__name__, specification_dir='openapi')
 
-#CORS(api.app)
-api.add_api('swagger.yaml')
+#api.add_api('swagger.yaml')
+application.add_api(
+    "swagger.yaml", resolver=RestyResolver("api"), strict_validation=False
+)
+
+# expose an app object for "flask run"
+api = application.app
 
 if __name__ == '__main__':
     api.run(host='0.0.0.0', port=5678, debug=True)
