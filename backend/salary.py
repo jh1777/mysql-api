@@ -1,27 +1,39 @@
+from backend.endpoint import ApiEndpoint
 import pymysql
 import pymysql.cursors
 import connexion
-
-from backend.base import queryDb
+import pendulum
+from backend.base import get, getById, insert, delete
+from connexion import request
+app = connexion.App(__name__)
+now = pendulum.now("Europe/Paris")
 
 def create():
-    return  "Created"
+    response = insert(ApiEndpoint.SALARY, request.json)
+    return response
 
 def getAll():
-    return "Get All entries"
+    data = get(ApiEndpoint.SALARY)
+    if (not data):
+        return None, 404
 
-def getById(id):
+    return data, 200
 
-    data = queryDb("select * from Gehalt where Id = " + format(id))
+def getId(id):
+    data = getById(ApiEndpoint.SALARY, format(id))
 
     if (not data):
         return None, 404
 
     return data, 200
+
+def deleteId(id):
+    delete(ApiEndpoint.SALARY, "Id = " +format(id))
+
+    return None, 200
     
 def getByYear(year):
-
-    data = queryDb("select * from Gehalt where Jahr = " + format(year))
+    data = get(ApiEndpoint.SALARY, "Jahr = " + format(year))
 
     if (not data):
         return None, 404

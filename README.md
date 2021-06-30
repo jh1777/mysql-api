@@ -4,6 +4,11 @@ New version of the locally running API for MySQL DB
 
 # Dev
 
+## Docker
+
+Run shell inside image
+`docker run -it mysql-api sh`
+
 ## VS Code Run  
 
 ```json

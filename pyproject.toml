@@ -13,6 +13,7 @@ python = "^3.6.9"
 PyMySQL = "^1.0.2"
 connexion = {extras = ["swagger-ui"], version = "^2.7.0"}
 Flask = "^2.0.1"
+pendulum = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 

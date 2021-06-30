@@ -30,7 +30,7 @@ paths:
         schema:
           $ref: "#/definitions/Salary"
       responses:
-        "200":
+        "204":
           description: "successful operation"
         "405":
           description: "Invalid input"
@@ -63,7 +63,7 @@ paths:
       - "salary"
       summary: "Find salary by ID"
       description: "Returns one entry for that Id"
-      operationId: "backend.salary.getById"
+      operationId: "backend.salary.getId"
       produces:
       - "application/json"
       parameters:
@@ -78,8 +78,31 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Salary"
-        "400":
-          description: "Invalid Year supplied"
+        "404":
+          description: "Not found"
+        "500":
+          description: "Server error"
+    
+    delete:
+      tags:
+      - "salary"
+      summary: "Delete salary by ID"
+      description: "Deletes one entry for that Id"
+      operationId: "backend.salary.deleteId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of Salary entry to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+        "500":
+          description: "Server error"
         "404":
           description: "Not found"
 
@@ -126,16 +149,12 @@ definitions:
         format: "int32"
       Netto:
         type: "number"
-        multipleOf: 0.01
       Brutto:
         type: "number"
-        multipleOf: 0.01
       AKP:
         type: "number"
-        multipleOf: 0.01
       Kantine:
         type: "number"
-        multipleOf: 0.01
       Arbeitgeber:
         type: "string"
       Wochenstunden:
