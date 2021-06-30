@@ -70,6 +70,6 @@ CMD ["gunicorn3", \
     "--worker-tmp-dir", "/dev/shm", \
     "--workers=2", "--threads=2", "--worker-class=gthread", \
     "--log-file=-", \
-    "--timeout", "120",  \
-    "app.py"]
+    "--timeout", "60",  \
+    "app:api"]
 
