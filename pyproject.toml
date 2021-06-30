@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "mysql-api"
+version = "0.1.0"
+description = ""
+authors = ["Joerg"]
+packages = [
+    { include = "app.py" },
+    { include = "backend" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.9"
+PyMySQL = "^1.0.2"
+connexion = {extras = ["swagger-ui"], version = "^2.7.0"}
+Flask = "^2.0.1"
+pendulum = "^2.1.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
