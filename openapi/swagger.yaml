@@ -11,6 +11,26 @@ tags:
 schemes:
 - "http"
 paths:
+  /expenses:
+    get:
+      tags:
+      - "expenses"
+      summary: "Gets all expenses entries"
+      description: ""
+      operationId: "backend.expenses.getAll"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Expense"
+        "400":
+          description: "Invalid status value"
+        "500":
+          description: "Server error"
   /salary:
     post:
       tags:
@@ -160,3 +180,34 @@ definitions:
       Wochenstunden:
         type: "integer"
         format: "int32"
+
+  Expense:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      Name:
+        type: "string"
+      Betrag:
+        type: "number"
+      Beschreibung:
+        type: "string"
+      Intervall:
+        type: "string"
+      Kategorie:
+        type: "string"
+      Beschreibung:
+        type: "string"
+      Tag:
+        type: "string"
+      Start:
+        type: "string"
+      Ende:
+        type: "string"
+      Erstellt:
+        type: "string"
+      Bearbeitet:
+        type: "string"
+      Person:
+        type: "string"
