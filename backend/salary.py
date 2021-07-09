@@ -4,17 +4,17 @@ import pymysql.cursors
 import connexion
 import pendulum
 import json
-from backend.baseMongo import get, post, getMongoResult
+from backend.baseMongo import get, post, delete
 from connexion import request
 app = connexion.App(__name__)
 now = pendulum.now("Europe/Paris")
 
 def create():
     response = post(ApiEndpoint.SALARY, request.json)
-    if (not response.acknowledged):
+    if (not response['acknowledged']):
         return None, 400
 
-    return getMongoResult(response), 200
+    return response, 200
 
 def getAll():
     data = get(ApiEndpoint.SALARY)
@@ -31,9 +31,10 @@ def getId(id):
     return data, 200
 
 def deleteId(id):
-    #delete(ApiEndpoint.SALARY, "Id = " +format(id))
-
-    return None, 200
+    response = delete(ApiEndpoint.SALARY, format(id))
+    if (not response['acknowledged']):
+        return None, 400
+    return response, 200
     
 def getByYear(year):
     data = get(ApiEndpoint.SALARY, None, {"Jahr": year })

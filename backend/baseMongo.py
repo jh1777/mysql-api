@@ -1,7 +1,7 @@
 
 import re
 from pymongo import collection
-from pymongo.results import InsertManyResult
+from pymongo.results import DeleteResult, InsertManyResult
 from backend.endpoint import ApiEndpoint
 from bson.objectid import ObjectId
 import connexion
@@ -54,14 +54,16 @@ def post(api: ApiEndpoint, items) -> InsertManyResult:
     for doc in docs:
         doc['_created']=now
     result = collection.insert_many(docs)
-    return result
+    return getMongoResult(result)
 
-def delete(api: ApiEndpoint, id: str):
+def delete(api: ApiEndpoint, id: str) -> dict:
     collection = getMongoCollection(api.name.lower())
-    result = collection.delete_one({"_id": id })
+    response = collection.delete_one({"_id": ObjectId(id) })
+    result = { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
+    return result
 
 def getMongoResult(result: InsertManyResult) -> dict:
     ids = []
     for id in result.inserted_ids:
         ids.append(str(id))
-    return { "acknowledged": str(result.acknowledged), "inserted_ids": ', '.join(ids) }
+    return { "acknowledged": result.acknowledged, "inserted_ids": ', '.join(ids) }
