@@ -3,15 +3,17 @@ import pymysql
 import pymysql.cursors
 import connexion
 import pendulum
-from backend.baseMongo import get
+from backend.baseMongo import get, post, getMongoResult
 from connexion import request
 app = connexion.App(__name__)
 now = pendulum.now("Europe/Paris")
 
 def create():
-    #response = insert(ApiEndpoint.EXPENSES, request.json)
-    #return response
-    return None, 200
+    response = post(ApiEndpoint.EXPENSES, request.json)
+    if (not response.acknowledged):
+        return None, 400
+
+    return getMongoResult(response), 200
 
 def getAll():
     data = get(ApiEndpoint.EXPENSES)

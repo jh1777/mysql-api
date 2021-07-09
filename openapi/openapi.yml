@@ -30,6 +30,26 @@ paths:
         500:
           description: Server error
           content: {}
+    post:
+      tags:
+      - expenses
+      summary: Inserts expenses entries
+      operationId: backend.expenses.create
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
   /expenses/{id}:
     get:
       tags:
@@ -42,17 +62,14 @@ paths:
         description: Id of Expense entry to return
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Expense'
+                $ref: '#/components/schemas/Expense'
         400:
           description: Invalid status value
           content: {}
@@ -90,7 +107,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Salary'
+              type: array
+              items:
+                $ref: '#/components/schemas/Salary'
         required: true
       responses:
         204:
@@ -116,8 +135,7 @@ paths:
         description: Id of Salary entry to return
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
