@@ -8,7 +8,7 @@ application = connexion.App(__name__, specification_dir='openapi')
 application.app.json_encoder = CustomJSONEncoder
 #api.add_api('swagger.yaml')
 application.add_api(
-    "openapi.yml", resolver=RestyResolver("backend"), strict_validation=False
+    "openapi.yml", resolver=RestyResolver("backend"), strict_validation=True
 )
 
 # expose an app object for "flask run"

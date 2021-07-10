@@ -1,13 +1,17 @@
 openapi: 3.0.1
 info:
-  title: MySQL API
-  description: MySQL API for local private Database
-  version: 1.0.0
+  title: Personal Data API
+  description: Personal API for local private usage
+  contact:
+    name: Joerg H.
+  version: 0.1.0
 servers:
 - url: http://192.168.178.129/api
 tags:
 - name: salary
   description: Gehalt / Salary API calls
+- name: expenses
+  description: Ausgaben / Expenses API calls
 paths:
   /expenses:
     get:
@@ -35,15 +39,19 @@ paths:
       - expenses
       summary: Inserts expenses entries
       operationId: backend.expenses.create
+      requestBody:
+        description: Expense objects that needs to be added to the db
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Expense'
+        required: true
       responses:
         200:
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Expense'
+          content: {}
         400:
           description: Invalid status value
           content: {}
@@ -70,6 +78,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Expense'
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    put:
+      tags:
+      - expenses
+      summary: Updates one expenses entry
+      operationId: backend.expenses.update
+      requestBody:
+        description: Expense object that needs to be updated to the db
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Expense'
+        required: true
+      parameters:
+      - name: id
+        in: path
+        description: Id of Expense entry to update
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content: {}
         400:
           description: Invalid status value
           content: {}
@@ -126,7 +163,7 @@ paths:
       summary: Add a new salary entry to the database
       operationId: backend.salary.create
       requestBody:
-        description: Salary object that needs to be added to the db
+        description: Salary objects that needs to be added to the db
         content:
           application/json:
             schema:
@@ -168,6 +205,35 @@ paths:
                 $ref: '#/components/schemas/Salary'
         404:
           description: Not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    put:
+      tags:
+      - salary
+      summary: Updates one expenses entry
+      operationId: backend.salary.update
+      requestBody:
+        description: Salary object that needs to be updated to the db
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Salary'
+        required: true
+      parameters:
+      - name: id
+        in: path
+        description: Id of Salary entry to update
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        400:
+          description: Invalid status value
           content: {}
         500:
           description: Server error
@@ -230,6 +296,8 @@ components:
     Salary:
       type: object
       properties:
+        _id:
+          type: string
         id:
           type: integer
           format: int64
@@ -255,6 +323,8 @@ components:
     Expense:
       type: object
       properties:
+        _id:
+          type: string
         id:
           type: integer
           format: int64
