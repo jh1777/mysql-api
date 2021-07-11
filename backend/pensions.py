@@ -9,42 +9,40 @@ app = connexion.App(__name__)
 now = pendulum.now("Europe/Paris")
 
 def getId(id):
-    data = get(ApiEndpoint.EXPENSES, id)
+    data = get(ApiEndpoint.PENSIONS, id)
     if (not data):
         return None, 404
 
     return data, 200
 
 def getAll():
-    data = get(ApiEndpoint.EXPENSES)
-    if (not data):
-        return None, 404
-
-    return data, 200
-
-def getByPerson(name: str):
-    data = get(ApiEndpoint.EXPENSES, None, { "Person": name })
+    # For Migration: 
+    #from backend.base import get, copyToMongo
+    #data = get(ApiEndpoint.PENSIONS)
+    #copyToMongo(data, ApiEndpoint.PENSIONS)
+    # -----
+    data = get(ApiEndpoint.PENSIONS)
     if (not data):
         return None, 404
 
     return data, 200
 
 def create():
-    response = post(ApiEndpoint.EXPENSES, request.json)
+    response = post(ApiEndpoint.PENSIONS, request.json)
     if (not response['acknowledged']):
         return None, 400
 
     return response, 200
 
 def update(id):
-    response = updateItem(ApiEndpoint.EXPENSES, format(id), request.json)
+    response = updateItem(ApiEndpoint.PENSIONS, format(id), request.json)
     if (not response['acknowledged']):
         return None, 400
 
     return response, 200
 
 def deleteId(id):
-    response = delete(ApiEndpoint.EXPENSES, format(id))
+    response = delete(ApiEndpoint.PENSIONS, format(id))
     if (not response['acknowledged']):
         return None, 400
     return response, 200

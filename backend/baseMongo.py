@@ -1,6 +1,6 @@
 
 from pymongo import collection
-from pymongo.results import DeleteResult, InsertManyResult
+from pymongo.results import DeleteResult, InsertManyResult, UpdateResult
 from backend.endpoint import ApiEndpoint
 from bson.objectid import ObjectId
 import connexion
@@ -47,7 +47,7 @@ def get(api: ApiEndpoint, id: str = None, filter: dict = None):
     data = list(collection.find())
     return data
 
-def post(api: ApiEndpoint, items) -> InsertManyResult:
+def post(api: ApiEndpoint, items) -> dict:
     collection = getMongoCollection(api.name.lower())
     docs = map(items)
     # Add a system creation date
@@ -55,34 +55,54 @@ def post(api: ApiEndpoint, items) -> InsertManyResult:
         doc['_created']=now
     result = collection.insert_many(docs)
     # Create API response
-    return getMongoResult(result)
+    return mapMongoResultObject(result)
 
 def delete(api: ApiEndpoint, id: str) -> dict:
     collection = getMongoCollection(api.name.lower())
     response = collection.delete_one({"_id": ObjectId(id) })
     # Create API response
-    result = { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
-    return result
+    #result = { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
+    return mapMongoResultObject(response)
 
-def updateItem(api: ApiEndpoint, id: str, updates: dict):
+def updateItem(api: ApiEndpoint, id: str, updates: dict) -> dict:
     collection = getMongoCollection(api.name.lower())
     docs = map([updates])
     doc = docs[0]
     # Add a system modification date 
-    # TODO: bug .. always 1
     doc['_modified']=now
-    if '_modifiedCount' in doc:
-        doc['_modifiedCount'] = doc['_modifiedCount'] + 1
-    else:
-        doc['_modifiedCount'] = 1
-
     response = collection.update_one({"_id": ObjectId(id) }, {"$set": doc }, upsert=False)
     # Create API response
-    result = { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
+    #result = { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
+    return mapMongoResultObject(response)
+
+
+def mapMongoResultObject(response) -> dict:
+    if isinstance(response, InsertManyResult):
+        ids = []
+        for id in response.inserted_ids:
+            ids.append(str(id))
+        return { "acknowledged": response.acknowledged, "inserted_ids": ', '.join(ids) }
+
+    if isinstance(response, DeleteResult):
+        return { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
+
+    if isinstance(response, UpdateResult):
+        return { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
+
+
+"""
+Migration of a Doc: For later Usage (untested)
+"""
+def documentMigration(api: ApiEndpoint, updates: dict):
+    collection = getMongoCollection(api.name.lower())
+    docs = collection.find()
+    ## DO SOMETHING WITH updates AND docs
+
+    result = []
+    for doc in docs:
+        docresult = collection.update_one({"_id": ObjectId(id) }, {"$set": doc }, upsert=False)
+        result.append(mapMongoResultObject(docresult))
+
+    ## ----
     return result
 
-def getMongoResult(result: InsertManyResult) -> dict:
-    ids = []
-    for id in result.inserted_ids:
-        ids.append(str(id))
-    return { "acknowledged": result.acknowledged, "inserted_ids": ', '.join(ids) }

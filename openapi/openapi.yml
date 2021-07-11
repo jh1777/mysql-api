@@ -4,17 +4,153 @@ info:
   description: Personal API for local private usage
   contact:
     name: Joerg H.
-  version: 0.1.0
+  version: 0.2.0
 servers:
 - url: http://192.168.178.129/api
 tags:
 - name: salary
   description: Gehalt / Salary API calls
 - name: expenses
-  description: Ausgaben / Expenses API calls
+  description: Ausgaben / Expense API calls
 - name: insurances
-  description: Versicherungen / Insurances API calls
+  description: Versicherungen / Insurance API calls
+- name: pensions
+  description: Absicherung / Pension API calls
 paths:
+  /pensions:
+    get:
+      tags:
+      - pensions
+      summary: Gets all pensions entries
+      operationId: backend.pensions.getAll
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pension'
+        400:
+          description: Invalid status value
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    post:
+      tags:
+      - pensions
+      summary: Inserts pensions entries
+      operationId: backend.pensions.create
+      requestBody:
+        description: Pension objects that needs to be added to the db
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Pension'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
+  /pensions/{id}:
+    get:
+      tags:
+      - pensions
+      summary: Gets one pensions entry
+      operationId: backend.pensions.getId
+      parameters:
+      - name: id
+        in: path
+        description: Id of Ipension entry to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pension'
+        400:
+          description: Invalid status value
+          content: {}
+        404:
+          description: Not found
+          content: {}          
+        500:
+          description: Server error
+          content: {}
+    put:
+      tags:
+      - pensions
+      summary: Updates one pensions entry
+      operationId: backend.pensions.update
+      requestBody:
+        description: Pension object that needs to be updated to the db
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pension'
+        required: true
+      parameters:
+      - name: id
+        in: path
+        description: Id of Pension entry to update
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        400:
+          description: Invalid status value
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    delete:
+      tags:
+      - pensions
+      summary: Delete pension by _id
+      description: Deletes one pensions entry
+      operationId: backend.pensions.deleteId
+      parameters:
+      - name: id
+        in: path
+        description: Id of Pension entry to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    
+
   /insurances:
     get:
       tags:
@@ -32,6 +168,9 @@ paths:
                   $ref: '#/components/schemas/Insurance'
         400:
           description: Invalid status value
+          content: {}
+        404:
+          description: Not found
           content: {}
         500:
           description: Server error
@@ -83,6 +222,9 @@ paths:
         400:
           description: Invalid status value
           content: {}
+        404:
+          description: Not found
+          content: {}
         500:
           description: Server error
           content: {}
@@ -111,6 +253,9 @@ paths:
           content: {}
         400:
           description: Invalid status value
+          content: {}
+        404:
+          description: Not found
           content: {}
         500:
           description: Server error
@@ -157,6 +302,9 @@ paths:
         400:
           description: Invalid status value
           content: {}
+        404:
+          description: Not found
+          content: {}
         500:
           description: Server error
           content: {}
@@ -184,6 +332,37 @@ paths:
         500:
           description: Server error
           content: {}
+  /expenses/person/{name}:
+    get:
+      tags:
+      - expenses
+      summary: Gets expenses entries for a certain person
+      operationId: backend.expenses.getByPerson
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Person to get expense entries for
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+        400:
+          description: Invalid status value
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
   /expenses/{id}:
     get:
       tags:
@@ -206,6 +385,9 @@ paths:
                 $ref: '#/components/schemas/Expense'
         400:
           description: Invalid status value
+          content: {}
+        404:
+          description: Not found
           content: {}
         500:
           description: Server error
@@ -232,6 +414,9 @@ paths:
       responses:
         200:
           description: successful operation
+          content: {}
+        404:
+          description: Not found
           content: {}
         400:
           description: Invalid status value
@@ -281,6 +466,9 @@ paths:
                   $ref: '#/components/schemas/Salary'
         400:
           description: Invalid status value
+          content: {}
+        404:
+          description: Not found
           content: {}
         500:
           description: Server error
@@ -363,6 +551,9 @@ paths:
         400:
           description: Invalid status value
           content: {}
+        404:
+          description: Not found
+          content: {}          
         500:
           description: Server error
           content: {}
@@ -419,8 +610,41 @@ paths:
         404:
           description: Not found
           content: {}
+          
 components:
   schemas:
+    Pension:
+      type: object
+      properties:
+        _id:
+          type: string
+        id:
+          type: integer
+          format: int32
+        Person:
+          type: string
+        Name:
+          type: string
+        Versicherung:
+          type: string
+        Versicherungsnummer:
+          type: string
+        Monatsbetrag:
+          type: number
+        Einmalzahlung:
+          type: number
+        Faelligkeit:
+          type: string
+        Kommentar:
+          type: string
+        Bearbeitet:
+          type: string
+        Erstellt:
+          type: string
+        Todesfallsumme:
+          type: number
+        Berufsunfaehigkeit:
+          type: number
     Insurance:
       type: object
       properties:

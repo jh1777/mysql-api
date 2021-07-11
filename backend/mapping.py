@@ -4,6 +4,9 @@ from pendulum import instance
 
 from datetime import date
 from datetime import datetime
+import pendulum
+
+now = pendulum.now("Europe/Paris")
 def map(array):
     if array is None: return None
     result = []
@@ -20,7 +23,9 @@ def map(array):
             else:
                 new_entry[k]=v 
         new_entry.__delitem__('Erstellt')           
-        new_entry.__delitem__('Bearbeitet')           
+        new_entry.__delitem__('Bearbeitet')
+        if not '_created' in new_entry:
+            new_entry['_created']=now
         result.append(new_entry)
 
     return result
