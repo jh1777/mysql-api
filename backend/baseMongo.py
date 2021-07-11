@@ -1,4 +1,6 @@
 
+from pendulum.datetime import DateTime
+from pendulum.tz.timezone import Timezone
 from pymongo import collection
 from pymongo.results import DeleteResult, InsertManyResult, UpdateResult
 from backend.endpoint import ApiEndpoint
@@ -35,7 +37,7 @@ def getMongoCollection(name: str):
     collection = db.get_collection(name, codec_options=codec_options)
     return collection
 
-def get(api: ApiEndpoint, id: str = None, filter: dict = None):
+def get(api: ApiEndpoint, id: str = None, filter: dict = None) -> list:
     collection = getMongoCollection(api.name.lower())
     app.app.logger.info('Getting data from Mongo DB collection "%s"', api.name.lower())
 
@@ -49,6 +51,16 @@ def get(api: ApiEndpoint, id: str = None, filter: dict = None):
 
     data = list(collection.find())
     return data
+
+def endeFilter(item):
+    if "Ende" in item and item['Ende'] != None:
+        return pendulum.instance(item['Ende'], "Europe/Paris") > now
+    return True
+
+def getActiveOnly(_api: ApiEndpoint, _id: str = None, _filter: dict = None) -> list:
+    data = get(_api, _id, _filter)
+    filteredData = filter(endeFilter, data)
+    return list(filteredData)
 
 def post(api: ApiEndpoint, items) -> dict:
     collection = getMongoCollection(api.name.lower())

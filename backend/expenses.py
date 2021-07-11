@@ -3,7 +3,7 @@ import pymysql
 import pymysql.cursors
 import connexion
 import pendulum
-from backend.baseMongo import get, post, delete, updateItem
+from backend.baseMongo import get, getActiveOnly, post, delete, updateItem
 from connexion import request
 app = connexion.App(__name__)
 now = pendulum.now("Europe/Paris")
@@ -16,14 +16,14 @@ def getId(id):
     return data, 200
 
 def getAll():
-    data = get(ApiEndpoint.EXPENSES)
+    data = getActiveOnly(ApiEndpoint.EXPENSES)
     if (not data):
         return None, 404
 
     return data, 200
 
 def getByPerson(name: str):
-    data = get(ApiEndpoint.EXPENSES, None, { "Person": name })
+    data = getActiveOnly(ApiEndpoint.EXPENSES, None, { "Person": name })
     if (not data):
         return None, 404
 

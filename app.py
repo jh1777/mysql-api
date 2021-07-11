@@ -1,9 +1,10 @@
 from jsonEncoder import CustomJSONEncoder
 import connexion
 from connexion.resolver import RestyResolver
-#from flask_cors import CORS
+from flask_cors import CORS
 
 application = connexion.App(__name__, specification_dir='openapi')
+CORS(application.app)
 
 application.app.json_encoder = CustomJSONEncoder
 #api.add_api('swagger.yaml')
