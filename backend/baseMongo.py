@@ -1,6 +1,4 @@
 
-from pendulum.datetime import DateTime
-from pendulum.tz.timezone import Timezone
 from pymongo import collection
 from pymongo.results import DeleteResult, InsertManyResult, UpdateResult
 from backend.endpoint import ApiEndpoint
@@ -42,8 +40,11 @@ def get(api: ApiEndpoint, id: str = None, filter: dict = None) -> list:
     app.app.logger.info('Getting data from Mongo DB collection "%s"', api.name.lower())
 
     if id != None:
-        data = collection.find_one({"_id": ObjectId(id) })
-        return data
+        if ObjectId.is_valid(id):
+            data = collection.find_one({"_id": ObjectId(id) })
+            return data
+        else:
+            raise ValueError('No ObjectID was found - nothing to query!')
 
     if filter != None:
         data = list(collection.find(filter))
