@@ -13,12 +13,12 @@ app = connexion.App(__name__)
 app.app.config.from_object("config.DevelopmentConfig")
 
 
-""" def copyToMongo(items, apiType: ApiEndpoint):
+def copyToMongo(items, apiType: ApiEndpoint):
     from backend.mapping import map
     from backend.baseMongo import getMongoCollection
     collection = getMongoCollection(apiType.name.lower())
     newresult = map(items)
-    collection.insert_many(newresult) """
+    collection.insert_many(newresult)
 
 def insert(apiType: ApiEndpoint, data: dict):
     values = ""

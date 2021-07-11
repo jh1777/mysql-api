@@ -12,7 +12,133 @@ tags:
   description: Gehalt / Salary API calls
 - name: expenses
   description: Ausgaben / Expenses API calls
+- name: insurances
+  description: Versicherungen / Insurances API calls
 paths:
+  /insurances:
+    get:
+      tags:
+      - insurances
+      summary: Gets all insurances entries
+      operationId: backend.insurances.getAll
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Insurance'
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    post:
+      tags:
+      - insurances
+      summary: Inserts insurances entries
+      operationId: backend.insurances.create
+      requestBody:
+        description: Insurance objects that needs to be added to the db
+        content:
+          application/json:
+            schema:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Insurance'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
+  /insurances/{id}:
+    get:
+      tags:
+      - insurances
+      summary: Gets one insurances entry
+      operationId: backend.insurances.getId
+      parameters:
+      - name: id
+        in: path
+        description: Id of Iinsurance entry to return
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Insurance'
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    put:
+      tags:
+      - insurances
+      summary: Updates one insurances entry
+      operationId: backend.insurances.update
+      requestBody:
+        description: Insurance object that needs to be updated to the db
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Insurance'
+        required: true
+      parameters:
+      - name: id
+        in: path
+        description: Id of Insurance entry to update
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        400:
+          description: Invalid status value
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    delete:
+      tags:
+      - insurances
+      summary: Delete insurance by _id
+      description: Deletes one insurances entry
+      operationId: backend.insurances.deleteId
+      parameters:
+      - name: id
+        in: path
+        description: Id of Insurance entry to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        404:
+          description: Not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+    
   /expenses:
     get:
       tags:
@@ -136,6 +262,8 @@ paths:
         500:
           description: Server error
           content: {}
+
+
   /salary:
     get:
       tags:
@@ -293,6 +421,25 @@ paths:
           content: {}
 components:
   schemas:
+    Insurance:
+      type: object
+      properties:
+        _id:
+          type: string
+        id:
+          type: integer
+          format: int32
+        Name:
+          type: string
+        Rueckkaufswert:
+          type: number
+        Datum:
+          type: string
+        AusgabenId:
+          type: integer
+        Erstellt:
+          type: string
+
     Salary:
       type: object
       properties:
