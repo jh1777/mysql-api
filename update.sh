@@ -16,4 +16,4 @@ echo "<<< Run the new docker image as mysql-api-container >>>"
 docker run --name mysql-api-container -d -p 4568:8080 mysql-api
 
 echo "<<< Remove all unused images >>>" 
-docker image prune -a --force
+echo "docker image prune -a --force"

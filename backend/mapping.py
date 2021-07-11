@@ -22,8 +22,10 @@ def map(array):
                 new_entry[k]= datetime.combine(v, datetime.min.time())
             else:
                 new_entry[k]=v 
-        new_entry.__delitem__('Erstellt')           
-        new_entry.__delitem__('Bearbeitet')
+        if 'Erstellt' in new_entry:
+            new_entry.__delitem__('Erstellt')           
+        if 'Bearbeitet' in new_entry:
+            new_entry.__delitem__('Bearbeitet')
         if not '_created' in new_entry:
             new_entry['_created']=now
         result.append(new_entry)

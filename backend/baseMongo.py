@@ -22,6 +22,7 @@ CONNECTION_STRING = app.app.config["MONGO"]
 # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
 from pymongo import MongoClient
 client = MongoClient(CONNECTION_STRING)
+app.app.logger.info('Connecting to Mongo DB "finances"')
 
 # Create the database for our example (we will use the same database throughout the tutorial
 db = client['finances']
@@ -36,6 +37,8 @@ def getMongoCollection(name: str):
 
 def get(api: ApiEndpoint, id: str = None, filter: dict = None):
     collection = getMongoCollection(api.name.lower())
+    app.app.logger.info('Getting data from Mongo DB collection "%s"', api.name.lower())
+
     if id != None:
         data = collection.find_one({"_id": ObjectId(id) })
         return data
@@ -49,6 +52,7 @@ def get(api: ApiEndpoint, id: str = None, filter: dict = None):
 
 def post(api: ApiEndpoint, items) -> dict:
     collection = getMongoCollection(api.name.lower())
+    app.app.logger.info('Inserting data to Mongo DB collection "%s"', api.name.lower())
     docs = map(items)
     # Add a system creation date
     for doc in docs:
@@ -59,36 +63,39 @@ def post(api: ApiEndpoint, items) -> dict:
 
 def delete(api: ApiEndpoint, id: str) -> dict:
     collection = getMongoCollection(api.name.lower())
+    app.app.logger.info('Deleting item %s from Mongo DB collection "%s"', id, api.name.lower())
     response = collection.delete_one({"_id": ObjectId(id) })
     # Create API response
-    #result = { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
     return mapMongoResultObject(response)
 
 def updateItem(api: ApiEndpoint, id: str, updates: dict) -> dict:
     collection = getMongoCollection(api.name.lower())
+    app.app.logger.info('Updating item %s in Mongo DB collection "%s"', id, api.name.lower())
     docs = map([updates])
     doc = docs[0]
     # Add a system modification date 
     doc['_modified']=now
     response = collection.update_one({"_id": ObjectId(id) }, {"$set": doc }, upsert=False)
     # Create API response
-    #result = { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
     return mapMongoResultObject(response)
 
 
 def mapMongoResultObject(response) -> dict:
+    result: dict
     if isinstance(response, InsertManyResult):
         ids = []
         for id in response.inserted_ids:
             ids.append(str(id))
-        return { "acknowledged": response.acknowledged, "inserted_ids": ', '.join(ids) }
+        result = { "acknowledged": response.acknowledged, "inserted_ids": ', '.join(ids) }
 
     if isinstance(response, DeleteResult):
-        return { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
+        result = { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
 
     if isinstance(response, UpdateResult):
-        return { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
+        result = { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
 
+    app.app.logger.info('%s from Mongo DB operation = %s', response.__class__.__name__, result)
+    return result
 
 """
 Migration of a Doc: For later Usage (untested)
@@ -105,4 +112,3 @@ def documentMigration(api: ApiEndpoint, updates: dict):
 
     ## ----
     return result
-
