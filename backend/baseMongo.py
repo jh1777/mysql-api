@@ -69,6 +69,7 @@ def post(api: ApiEndpoint, items) -> dict:
     docs = map(items)
     # Add a system creation date
     for doc in docs:
+        doc['_modified']=now
         doc['_created']=now
     result = collection.insert_many(docs)
     # Create API response

@@ -1,6 +1,6 @@
 @host = localhost:8089/api
 
-@api = salary
+@api = expenses
 
 ### Get all
 # @name request 

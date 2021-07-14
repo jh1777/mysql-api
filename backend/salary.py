@@ -17,6 +17,12 @@ def create():
 
 def getAll():
     data = get(ApiEndpoint.SALARY)
+
+    for item in data:
+        padding = ''
+        if item['Monat']<10:
+            padding = '0'
+        item['_sortKey'] = int(str(item['Jahr'])+padding+str(item['Monat']))
     if (not data):
         return None, 404
 
