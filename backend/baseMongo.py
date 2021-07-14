@@ -106,7 +106,7 @@ def mapMongoResultObject(response) -> dict:
         result = { "acknowledged": response.acknowledged, "deleted_count": response.deleted_count }
 
     if isinstance(response, UpdateResult):
-        result = { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id, "_id": id }
+        result = { "acknowledged": response.acknowledged, "matched_count": response.matched_count, "modified_count": response.modified_count, "upserted_id": response.upserted_id }
 
     app.app.logger.info('%s from Mongo DB operation = %s', response.__class__.__name__, result)
     return result

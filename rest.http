@@ -9,13 +9,32 @@ GET http://{{host}}/{{api}}
 #@id = {{request.response.body.0._id}}
 
 ### Get by Id
-@id = no_id
+
 GET http://{{host}}/{{api}}/{{id}}
 
 ### Delete by Id
 DELETE http://{{host}}/{{api}}/{{id}}
 
-### Update by Id
-PUT http://{{host}}/{{api}}/{{id}}
+### Insert
+POST http://{{host}}/{{api}}
+Content-Type: application/json
 
-{}
+[
+    {
+        "Intervall": "Monat",
+        "Start": "2021-07-12T12:13:04.000Z",
+        "Person": "Jörg",
+        "Name": "TEST35",
+        "Kategorie": "Streaming",
+        "Betrag": 332
+    }
+]
+
+### Update by Id
+@id = 60ef5845d08c0a22b4f23b33
+PUT http://{{host}}/{{api}}/{{id}}
+Content-Type: application/json
+
+{
+    "Ende": "2021-07-29T12:13:04.000Z"
+}
